@@ -1,0 +1,18 @@
+FROM ubuntu:18.04
+Maintainer The DePINC Core developers <master@depinc.org>
+
+# Dependency
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install build-essential libtool autotools-dev pkg-config make automake curl python3 patch git yasm tzdata texinfo g++-multilib binutils-gold bsdmainutils libssl-dev -y && dpkg-reconfigure --frontend noninteractive tzdata && git clone https://github.com/Kitware/CMake /cmake && cd /cmake && ./configure && make && make install
+
+# Build env
+ENV BUILD_HOST='x86_64-linux-gnu'
+ENV BUILD_ARGS='--prefix=/ -enable-reduce-exports --enable-glibc-back-compat LDFLAGS=-static-libstdc++'
+ENV BUILD_THREADS=8
+
+# Workspace
+VOLUME /workspace
+WORKDIR /workspace
+
+# Entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/docker-entrypoint.sh"]
