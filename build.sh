@@ -92,7 +92,7 @@ for host in $BUILD_HOSTS; do
             chmod +x "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR/start-depinc-qt.sh"
         fi
         mkdir -p "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR/data" || exit 1
-        tar -zcvf "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-$host.tar.gz" -C "$BUILD_TEMP_DIR/release" $APPNAME-$APP_VER_SHORTSTR || exit 1
+        tar --no-xattrs -zcvf "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-$host.tar.gz" -C "$BUILD_TEMP_DIR/release" $APPNAME-$APP_VER_SHORTSTR || exit 1
         rm -rf "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR"
     fi
     echo "=============== Build <$host> complete ==============="
