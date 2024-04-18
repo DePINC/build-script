@@ -1,6 +1,17 @@
 FROM ubuntu:22.04
 Maintainer The DePINC Core developers <master@depinc.org>
 
+ARG PROXY_HOST_PORT
+
+ENV ALL_PROXY=$PROXY_HOST_PORT
+ENV HTTP_PROXY=$PROXY_HOST_PORT
+ENV HTTPS_PROXY=$PROXY_HOST_PORT
+
+RUN if [ ! -z "$PROXY_HOST_PORT" ]; then \
+        echo "Acquire::http::Proxy \"http://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf && \
+        echo "Acquire::https::Proxy \"https://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf; \
+    fi
+
 # Dependency
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install build-essential libtool autotools-dev pkg-config make automake curl python3 patch git yasm tzdata texinfo g++-multilib binutils-gold bsdmainutils libssl-dev -y && dpkg-reconfigure --frontend noninteractive tzdata && git clone https://github.com/Kitware/CMake /cmake && cd /cmake && ./configure && make && make install
 RUN apt-get install bsdmainutils nsis -y

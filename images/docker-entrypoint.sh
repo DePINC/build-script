@@ -2,6 +2,10 @@
 
 set -e
 
+ALL_PROXY=$PROXY_HOST_PORT
+HTTP_PROXY=$PROXY_HOST_PORT
+HTTPS_PROXY=$PROXY_HOST_PORT
+
 # build dest dir
 BUILD_DIR=/workspace_build/$BUILD_HOST
 mkdir -p $BUILD_DIR && cd $BUILD_DIR
