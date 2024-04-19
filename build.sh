@@ -57,6 +57,7 @@ for host in $BUILD_HOSTS; do
         -v "$BUILD_ROOT_DIR":/workspace_build \
         -e BUILD_THREADS=$BUILD_USE_THREADS \
         -e PROXY_HOST_PORT=$PROXY_HOST_PORT \
+        --network=host \
         depinc.org/depinc-build:0.0.1-bionic-$host \
         || exit 1
 

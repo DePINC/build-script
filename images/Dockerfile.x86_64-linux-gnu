@@ -8,8 +8,9 @@ ENV HTTP_PROXY=$PROXY_HOST_PORT
 ENV HTTPS_PROXY=$PROXY_HOST_PORT
 
 RUN if [ ! -z "$PROXY_HOST_PORT" ]; then \
-        echo "Acquire::http::Proxy \"http://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf && \
+        echo "Acquire::http::Proxy \"http://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf; \
         echo "Acquire::https::Proxy \"https://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf; \
+        echo "[http]\n  proxy=http://$PROXY_HOST_PORT\n  sslVerify=false" > $HOME/.gitconfig; \
     fi
 
 # Dependency

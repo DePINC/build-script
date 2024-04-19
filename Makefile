@@ -1,7 +1,7 @@
 IMAGENAME=depinc.org/depinc-build
 IMAGEVERSION?=0.0.1-bionic
 
-# PROXY_HOST_PORT=172.16.0.200:8080
+PROXY_HOST_PORT=host.docker.internal:8080
 
 BASEDIR = $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
