@@ -1,7 +1,8 @@
 FROM ubuntu:22.04
-Maintainer The DePINC Core developers <master@depinc.org>
+LABEL maintainer="The DePINC Core developers <master@depinc.org>"
 
 ARG PROXY_HOST_PORT
+ARG CMAKE_VERSION
 
 ENV ALL_PROXY=$PROXY_HOST_PORT
 ENV HTTP_PROXY=$PROXY_HOST_PORT
@@ -14,7 +15,7 @@ RUN if [ ! -z "$PROXY_HOST_PORT" ]; then \
     fi
 
 # Dependency
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install build-essential libtool autotools-dev pkg-config make automake curl python3 patch git yasm tzdata texinfo g++-multilib binutils-gold bsdmainutils libssl-dev -y && dpkg-reconfigure --frontend noninteractive tzdata && git clone https://github.com/Kitware/CMake /cmake && cd /cmake && ./configure && make && make install
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install build-essential libtool autotools-dev pkg-config make automake curl python3 patch git yasm tzdata texinfo g++-multilib binutils-gold bsdmainutils libssl-dev -y && dpkg-reconfigure --frontend noninteractive tzdata && git clone --branch $CMAKE_VERSION --depth 1 https://github.com/Kitware/CMake /cmake && cd /cmake && ./configure && make && make install
 RUN apt-get install bsdmainutils nsis -y
 RUN apt-get install g++-mingw-w64-x86-64 -y && update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
 
