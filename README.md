@@ -28,6 +28,7 @@ Build DePINC binary
 - Download DePINC source code by git: `git clone https://github.com/depinc/depinc.git`
 
 - Run build command: `cd ./depinc && make -f /YourBuildScriptPath/Makefile`
+- Or you can build with HTTP proxy (please provide it without prefix "http://"): `cd ./depinc && PROXY=192.168.1.200:8080 make -f /YourBuildScriptPath/Makefile`
 
 You will see the `../depinc_build/release` directory, it's the compiled binary
 package. If you want to compile the binary package of the specified platform,
