@@ -51,7 +51,9 @@ echo "===================================="
 for host in $BUILD_HOSTS; do
     echo "==================  Building <$host>  =================="
     BUILD_TEMP_DIR="$BUILD_ROOT_DIR/$host"
-    rm -rf "$BUILD_TEMP_DIR" || exit 1
+    echo "cleaning dir $BUILD_TEMP_DIR"
+    echo "making dir $BUILD_TEMP_DIR"
+    mkdir -p "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR/data" || { echo "failed to create dir $BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR/data"; exit 1; }
 
     docker run --rm -v "$WORKING_DIR":/workspace \
         -v "$BUILD_ROOT_DIR":/workspace_build \
@@ -64,17 +66,14 @@ for host in $BUILD_HOSTS; do
     echo "================== Installing <$host> =================="
     mkdir -p $BUILD_DIST_DIR || exit 1
     if [ "$host" == "x86_64-w64-mingw32" ]; then # Windows x86_64. => xxx.zip
-        mv "$BUILD_TEMP_DIR/DePINC-$APP_VER-win64-setup.exe" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win64-setup.exe" || exit 1
+        cp "$BUILD_TEMP_DIR/DePINC-$APP_VER-win64-setup.exe" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win64-setup.exe" || exit 1
         zip -j "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-win64.zip" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win64-setup.exe" || exit 1
-        rm "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win64-setup.exe" || exit 1
     elif [ "$host" == "i686-w64-mingw32" ]; then # Windows x86. => xxx.zip
-        mv "$BUILD_TEMP_DIR/DePINC-$APP_VER-win32-setup.exe" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win32-setup.exe" || exit 1
+        cp "$BUILD_TEMP_DIR/DePINC-$APP_VER-win32-setup.exe" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win32-setup.exe" || exit 1
         zip -j "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-win32.zip" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win32-setup.exe" || exit 1
-        rm "$BUILD_DIST_DIR/$APPNAME-$APP_VER_SHORTSTR-win32-setup.exe" || exit 1
     elif [ "$host" == "x86_64-apple-darwin14" ]; then # macOS. => xxx-osx.dmg
-        mv "$BUILD_TEMP_DIR/DePINC-Core.dmg" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-osx.dmg" || exit 1
+        cp "$BUILD_TEMP_DIR/DePINC-Core.dmg" "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-osx.dmg" || exit 1
     else # Unix. => xxx-$host.tar.gz
-        rm -rf "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR" && mkdir -p "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR" || exit 1
         cp -r "$BUILD_TEMP_DIR/release/bin" "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR" || exit 1
         cp -r "$BUILD_TEMP_DIR/release/include" "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR" || exit 1
         cp -r "$BUILD_TEMP_DIR/release/lib" "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR" || exit 1
@@ -95,7 +94,6 @@ for host in $BUILD_HOSTS; do
         fi
         mkdir -p "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR/data" || exit 1
         tar --no-xattrs -zcvf "$BUILD_DIST_DIR/$APPNAME-$APP_VER_FULLSTR-$host.tar.gz" -C "$BUILD_TEMP_DIR/release" $APPNAME-$APP_VER_SHORTSTR || exit 1
-        rm -rf "$BUILD_TEMP_DIR/release/$APPNAME-$APP_VER_SHORTSTR"
     fi
     echo "=============== Build <$host> complete ==============="
     echo ""
