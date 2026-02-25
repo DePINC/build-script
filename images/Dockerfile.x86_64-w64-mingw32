@@ -12,6 +12,7 @@ RUN if [ ! -z "$PROXY_HOST_PORT" ]; then \
         echo "Acquire::http::Proxy \"http://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf; \
         echo "Acquire::https::Proxy \"https://$PROXY_HOST_PORT\";\n" >> /etc/apt/apt.conf.d/proxy.conf; \
         echo "[http]\n  proxy=http://$PROXY_HOST_PORT\n  sslVerify=false" > $HOME/.gitconfig; \
+        echo "proxy=http://$PROXY_HOST_PORT" >> $HOME/.curlrc; \
     fi
 
 # Dependency
